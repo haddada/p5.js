@@ -1,6 +1,7 @@
 (function () {
-var shim = function (require) {
+ var shim = function (require) {
         window.requestDraw = function () {
+            console.log(this+"called");
             return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function (callback, element) {
                 window.setTimeout(callback, 1000 / 60);
             };
@@ -159,7 +160,7 @@ var core = function (require, shim, constants) {
             } else {
                 this._setup();
                 this._runFrames();
-                this._drawSketch();
+              this._drawSketch();
             }
         };
         Processing.prototype.preloadFunc = function (func, path) {
@@ -195,16 +196,19 @@ var core = function (require, shim, constants) {
             if (typeof userDraw === 'function') {
                 userDraw();
             }
-            self.curElement.context.setTransform(1, 0, 0, 1, 0, 0);
+            if (typeof this.curElement.context !== 'undefined') {
+                    this.curElement.context.setTransform(1, 0, 0, 1, 0, 0);
+            }
+                
         };
         Processing.prototype._runFrames = function () {
             var self = this;
             if (this.updateInterval) {
-                clearInterval(this.updateInterval);
             }
             this.updateInterval = setInterval(function () {
                 self._setProperty('frameCount', self.frameCount + 1);
             }, 1000 / self._targetFrameRate);
+            
         };
         Processing.prototype._applyDefaults = function () {
             this.curElement.context.fillStyle = '#FFFFFF';
@@ -943,7 +947,8 @@ var dommanipulate = function (require, core, inputmouse, inputtouch, dompelement
             var elt = document.createElement('div');
             elt.innerHTML = html;
             document.body.appendChild(elt);
-            var c = new PElement(elt, this);
+             c = new PElement(elt, this);
+
             this.context(c);
             return c;
         };

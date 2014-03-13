@@ -221,7 +221,9 @@ define(function (require) {
       userDraw();
     }
 
-    self.curElement.context.setTransform(1, 0, 0, 1, 0, 0);
+    if (typeof this.curElement.context !== 'undefined') {
+                    this.curElement.context.setTransform(1, 0, 0, 1, 0, 0);
+    }
   };
 
   Processing.prototype._runFrames = function() {

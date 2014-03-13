@@ -16,6 +16,8 @@ define(function(require) {
       this.context = elt.getContext('2d');
     }
   }
+
+
   PElement.prototype.html = function(html) {
     this.elt.innerHTML = html;
   };
